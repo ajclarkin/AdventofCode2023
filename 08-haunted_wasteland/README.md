@@ -16,13 +16,13 @@ Once again I used regular expressions to pull out the values and then assigned t
 We need the instructions to repeat as we cycle through them (LRLRLR) and so I created a `cycle()` to cycle through the list of instructions using `next()` to access it.
 
 
-# Features
+## Features
 Cycle, lowest common multiple, * operator (possibly called splat)
 
-# Part 1
+## Part 1
 Pretty straightforward. As we cycle through the instuctions we move through the dict of nodes until we finish.
 
-# Part 2
+## Part 2
 There's always a catch. This time it's multiple paths in parallel and finding the point that they finish at the same time. Simply running through it each time didn't work - I didn't really think it would - so I checked to see if each path reached a Z in a cyclical time frame. It did.
 
 The solution then is to find how many moves to finish each path and then find the lowest common multiple of those values.
