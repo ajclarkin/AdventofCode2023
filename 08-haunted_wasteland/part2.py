@@ -1,7 +1,8 @@
 import re
 from itertools import cycle
+from math import lcm
 
-lines = [x for x in open('example3.txt').read().split('\n')]
+lines = [x for x in open('input.txt').read().split('\n')]
 
 instructions = lines[0]
 instructions_cycle = cycle(instructions)
@@ -16,13 +17,24 @@ for l in lines[2:]:
 
 
 moves = 0
+move_count = dict()
 position_check = False
 
 while position_check == False:
     position_check = True
-    for position in positions:
-        position = nodes[position][0] if next(instructions_cycle) == 'L' else nodes[position][1]
+    move = 0 if next(instructions_cycle) == 'L' else 1
+
+    for key, position in enumerate(positions):
+        positions[key] = nodes[position][move]
         if position[2] != 'Z':
             position_check = False
-    moves += 1
-print(f'Total moves: {moves}')
+        else:
+            if key not in move_count.keys():
+                move_count[key] = moves
+    if position_check == False: moves += 1
+
+    if len(move_count.keys()) == len(positions):
+        break
+
+# Need to use a star to access the contents of the dict
+print(lcm(*move_count.values()))

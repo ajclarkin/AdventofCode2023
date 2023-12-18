@@ -14,7 +14,6 @@ for l in lines[2:]:
 position = 'AAA'
 moves = 0
 while position != 'ZZZ':
-    # print(position)
     position = nodes[position][0] if next(instructions_cycle) == 'L' else nodes[position][1]
     moves += 1
 
