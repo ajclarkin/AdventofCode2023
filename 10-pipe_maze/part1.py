@@ -1,6 +1,6 @@
 import numpy as np
 
-lines = [x for x in open('example.txt').read().split()]
+lines = [x for x in open('input.txt').read().split()]
 
 
 
@@ -19,6 +19,7 @@ for r, line in enumerate(lines):
     if 'S' in line:
         start = (r, line.index('S'))
 
+# Set up dictionaries for movements and the reverse movements
 dirs = {
         'N': (-1, 0),
         'E': (0, 1),
@@ -33,8 +34,6 @@ opp = {
         'W': 'E'
         }
 
-s_moves = list()
-
 
 moves = {
         '|': ('N', 'S'), 
@@ -42,52 +41,53 @@ moves = {
         'L': ('N', 'E'), 
         'J': ('N', 'W'), 
         '7': ('S', 'W'), 
-        'F': ('E', 'S') 
+        'F': ('E', 'S'),
+        '.': ()
         }
 
+
 # Find the start position move options
+s_moves = list()
+
+# Check each direction from S. If it contains a symbol which would allow movement back to S then this
+# is a valid move from S. Record which of the 4 movements from S are valid.
 for k,v in dirs.items():
     new = np.add(start, v)
     if opp[k] in moves[lines[new[0]][new[1]]]:
-        print(f'Checked start direction {k} and found {moves[lines[new[0]][new[1]]]}')
         s_moves.append(k)
-    else:
-        print(f'Checked start direction {k} and didnt find {moves[lines[new[0]][new[1]]]}')
-print(f'Start moves: {s_moves}')
 
 moves['S'] = (s_moves[0], s_moves[1]) 
-print(moves)
 
 r_max = len(lines)
 c_max = len(lines[0])
 
+tupleadd = lambda x, y: tuple(np.add(x, y))
 
 curr = start
 move_count = 0
 prev_move = ''
 
-def makemove(curr, prev_move):
-    pass
 
-print(f'Curr = {curr}')
 
 # While not at start with moves > 0
 #   Get possible moves: if one == opp(prev) then do other, else do first
 #   Increment counter
 
-#while curr != start and move_count != 0:
-next_move = lines[curr[0]][curr[1]]
-if next_move != 'S':
-    print(f'next move {moves[next_move]}')
-    movement = [d for d in moves[next_move] if d != opp[prev_move]]
-else:
-    print(f'next move {s_moves[0]}')
-    movement = moves['S'][0]
+while not (curr == start and move_count > 0):
+    next_move = lines[curr[0]][curr[1]]
+    if next_move != 'S':
+        movement = [d for d in moves[next_move] if d != opp[prev_move]][0]
+        curr = tupleadd(curr, dirs[movement])
+        prev_move = movement
+    else:
+        movement = moves['S'][0]
+        curr = tupleadd(curr, dirs[movement])
+        prev_move = movement
 
-print('found movement: {movement}')
+    move_count += 1
 
-    
-
+# The above for loop takes us all the way around the path. The furthest square is 1/2 total distance.
+print(f'Total moves {move_count} so furthest distance is {int(move_count/2)}')
 
 
 
